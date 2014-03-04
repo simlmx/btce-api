@@ -13,6 +13,14 @@ class TestPublic(unittest.TestCase):
              "date": 1368805684.878004}
 
         t = Trade(**d)
+
+        # simple equality test
+        self.assertEqual(t, t)
+        t2 = Trade(**d)
+        self.assertEqual(t, t2)
+        t2.tid = 2
+        self.assertNotEqual(t, t2)
+
         self.assertEqual(t.pair, d.get("pair"))
         self.assertEqual(t.trade_type, d.get("trade_type"))
         self.assertEqual(t.price, d.get("price"))

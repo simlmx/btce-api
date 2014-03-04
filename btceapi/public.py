@@ -110,6 +110,16 @@ class Trade(object):
         for k, v in state.items():
             setattr(self, k, v)
 
+    def __eq__(self, other):
+        return all(
+            getattr(self, k) == getattr(other, k)
+            for k in Trade.__slots__)
+
+    def __repr__(self):
+        return '<Trade({})>'.format(
+            ', '.join('{}={}'.format(
+                k, getattr(self, k)) for k in Trade.__slots__))
+
 
 def getTradeHistory(pair, connection=None, count=None):
     '''Retrieve the trade history for the given pair.  Returns a list of
