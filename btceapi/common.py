@@ -123,8 +123,10 @@ class BTCEConnection:
 
             headers.update({"Cookie": self.cookie})
 
-        self.conn.request("POST", url, params, headers)
-        response = self.conn.getresponse().read()
+        try:
+            self.conn.request("POST", url, params, headers)
+        finally:
+            response = self.conn.getresponse().read()
 
         return response
 
