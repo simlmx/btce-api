@@ -89,7 +89,11 @@ BODY_COOKIE_RE = re.compile(r'document\.cookie="a=([a-f0-9]{32});path=/;";')
 
 class BTCEConnection:
     def __init__(self, timeout=30):
-        self.conn = httplib.HTTPSConnection(btce_domain, timeout=timeout)
+        self._timeout = timeout
+        self.setup_connection()
+
+    def setup_connection(self):
+        self.conn = httplib.HTTPSConnection(btce_domain, timeout=self._timeout)
         self.cookie = None
 
     def close(self):
@@ -98,8 +102,15 @@ class BTCEConnection:
     def getCookie(self):
         self.cookie = ""
 
-        self.conn.request("GET", '/')
-        response = self.conn.getresponse()
+        try:
+            self.conn.request("GET", '/')
+            response = self.conn.getresponse()
+        except Exception:
+            # reset connection so it doesn't stay in a weird state if we catch
+            # the error in some other place
+            self.conn.close()
+            self.setup_connection()
+            raise
 
         setCookieHeader = response.getheader("Set-Cookie")
         match = HEADER_COOKIE_RE.search(setCookieHeader)
@@ -125,8 +136,14 @@ class BTCEConnection:
 
         try:
             self.conn.request("POST", url, params, headers)
-        finally:
             response = self.conn.getresponse().read()
+        except Exception:
+            # reset connection so it doesn't stay in a weird state if we catch
+            # the error in some other place
+            print 'resetting connection'
+            self.conn.close()
+            self.setup_connection()
+            raise
 
         return response
 
