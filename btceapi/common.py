@@ -140,7 +140,6 @@ class BTCEConnection:
         except Exception:
             # reset connection so it doesn't stay in a weird state if we catch
             # the error in some other place
-            print 'resetting connection'
             self.conn.close()
             self.setup_connection()
             raise
