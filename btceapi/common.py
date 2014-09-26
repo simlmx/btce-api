@@ -171,7 +171,8 @@ def validateOrder(pair, trade_type, rate, amount):
     minimum_amount = min_orders[pair]
     formatted_min_amount = formatCurrency(minimum_amount, pair)
     if amount < minimum_amount:
-        msg = "Trade amount too small; should be >= %s" % formatted_min_amount
+        msg = "Trade amount %r too small; should be >= %s" % \
+              (amount, formatted_min_amount)
         raise InvalidTradeAmountException(msg)
 
 
