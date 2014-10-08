@@ -74,13 +74,13 @@ def parseJSONResponse(response):
     def parse_decimal(var):
         return decimal.Decimal(var)
 
-    try:
-        r = json.loads(response, parse_float=parse_decimal,
-                       parse_int=parse_decimal)
-    except Exception as e:
-        msg = "Error while attempting to parse JSON response:"\
-              " %s\nResponse:\n%r" % (e, response)
-        raise Exception(msg)
+    # try:
+    r = json.loads(response, parse_float=parse_decimal,
+                    parse_int=parse_decimal)
+    # except Exception as e:
+    #     msg = "Error while attempting to parse JSON response:"\
+    #           " %s\nResponse:\n%r" % (e, response)
+    #     raise Exception(msg)
 
     return r
 
